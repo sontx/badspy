@@ -1,0 +1,3 @@
+[submodule "log-cpp"]
+	path = log-cpp
+	url = https://github.com/sontx/log-cpp.git
