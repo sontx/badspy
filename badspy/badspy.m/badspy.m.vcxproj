@@ -141,11 +141,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\badspy.c\log.cpp" />
+    <ClCompile Include="..\..\log-cpp\log.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\badspy.c\log.h" />
+    <ClInclude Include="..\..\log-cpp\log.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="proc.h" />
   </ItemGroup>

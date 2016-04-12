@@ -1,7 +1,7 @@
 #pragma once
 
 #include <windows.h>
-#include "log.h"
+#include "../../log-cpp/log.h"
 
 //#define SPY_ENCODE_DATA							/* encode data before write to hook file */
 #define SPY_FILE_AUTO_FLUSH						/* auto flush data back to hook file when write */

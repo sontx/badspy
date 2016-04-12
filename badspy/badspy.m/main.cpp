@@ -2,7 +2,7 @@
 #include <windows.h>
 #include "proc.h"
 #include "main.h"
-#include "../badspy.c/log.h"
+#include "../../log-cpp/log.h"
 #include <Gdiplus.h>
 #include <Shlwapi.h>
 #define ERROR_CODE 1

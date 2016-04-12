@@ -143,17 +143,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\log-cpp\log.cpp" />
     <ClCompile Include="factory.cpp" />
     <ClCompile Include="img.cpp" />
-    <ClCompile Include="log.cpp" />
     <ClCompile Include="stash.cpp" />
     <ClCompile Include="io.cpp" />
     <ClCompile Include="syshook.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\log-cpp\log.h" />
     <ClInclude Include="factory.h" />
     <ClInclude Include="img.h" />
-    <ClInclude Include="log.h" />
     <ClInclude Include="stash.h" />
     <ClInclude Include="io.h" />
     <ClInclude Include="spy.h" />
