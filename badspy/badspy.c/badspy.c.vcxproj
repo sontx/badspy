@@ -144,20 +144,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\log-cpp\log.cpp" />
-    <ClCompile Include="factory.cpp" />
-    <ClCompile Include="img.cpp" />
+    <ClCompile Include="kbhfile.cpp" />
+    <ClCompile Include="linklist.cpp" />
+    <ClCompile Include="queue.cpp" />
+    <ClCompile Include="screenshot.cpp" />
+    <ClCompile Include="scrotfile.cpp" />
+    <ClCompile Include="spy.cpp" />
+    <ClCompile Include="storable.cpp" />
+    <ClCompile Include="kbhook.cpp" />
     <ClCompile Include="stash.cpp" />
-    <ClCompile Include="io.cpp" />
-    <ClCompile Include="syshook.cpp" />
+    <ClCompile Include="storage.cpp" />
+    <ClCompile Include="task.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\log-cpp\log.h" />
-    <ClInclude Include="factory.h" />
-    <ClInclude Include="img.h" />
-    <ClInclude Include="stash.h" />
-    <ClInclude Include="io.h" />
+    <ClInclude Include="kbhfile.h" />
+    <ClInclude Include="linklist.h" />
+    <ClInclude Include="queue.h" />
+    <ClInclude Include="screenshot.h" />
+    <ClInclude Include="scrotfile.h" />
+    <ClInclude Include="storable.h" />
+    <ClInclude Include="kbhook.h" />
     <ClInclude Include="spy.h" />
-    <ClInclude Include="syshook.h" />
+    <ClInclude Include="stash.h" />
+    <ClInclude Include="storage.h" />
+    <ClInclude Include="task.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

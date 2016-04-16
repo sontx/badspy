@@ -1,20 +1,20 @@
-#include "img.h"
+#include "screenshot.h"
+#include "spy.h"
 #include <ole2.h>
 #include <olectl.h>
 
-// reference from http://stackoverflow.com/questions/9524393/how-to-capture-part-of-the-screen-and-save-it-to-a-bmp
-
-Screenshot::Screenshot(float scale, HookFile * hookfile)
+Screenshot::Screenshot(float scale, const char * file_path)
 {
 	this->scale = scale;
-	this->pHookFile = hookfile;
+	this->scrotFile = new ScrotFile(file_path);
 }
 
 Screenshot::~Screenshot()
 {
+	delete scrotFile;
 }
 
-bool Screenshot::saveb_bitmap(HBITMAP bmp) const
+bool Screenshot::save_bitmap(HBITMAP bmp) const
 {
 	// contains parameters to create a picture object through the OleCreatePictureIndirect function. (MSDN)
 	PICTDESC pictureDesc;
@@ -56,8 +56,8 @@ bool Screenshot::saveb_bitmap(HBITMAP bmp) const
 	GetHGlobalFromStream(stream, &mem);// retrieves the global memory handle to a stream
 	LPVOID data = GlobalLock(mem);// then get the first byte pointer of stream memory by call this api
 
-	// write bitmap bytes to file in disk
-	pHookFile->write(data, bytes_streamed);
+								  // write bitmap bytes to file in disk
+	scrotFile->write(data, bytes_streamed);
 
 	GlobalUnlock(mem);
 
@@ -73,8 +73,8 @@ void Screenshot::capture_to_file() const
 	HDC hdcMemoryDC = CreateCompatibleDC(hdcScreen);
 	int width = GetDeviceCaps(hdcScreen, HORZRES);
 	int height = GetDeviceCaps(hdcScreen, VERTRES);
-	int scaleWidth = (int) (width * scale);
-	int scaleHeight = (int) (height * scale);
+	int scaleWidth = (int)(width * scale);
+	int scaleHeight = (int)(height * scale);
 	HBITMAP hBitmap = CreateCompatibleBitmap(hdcScreen, scaleWidth, scaleHeight);
 	HGDIOBJ oldObject = SelectObject(hdcMemoryDC, hBitmap);
 	bool ok = false;
@@ -88,9 +88,9 @@ void Screenshot::capture_to_file() const
 			goto done;
 	}
 
-	hBitmap = (HBITMAP) SelectObject(hdcMemoryDC, oldObject);
+	hBitmap = (HBITMAP)SelectObject(hdcMemoryDC, oldObject);
 
-	saveb_bitmap(hBitmap);
+	save_bitmap(hBitmap);
 
 done:
 	DeleteObject(hBitmap);
