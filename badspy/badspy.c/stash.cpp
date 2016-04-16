@@ -16,6 +16,7 @@ void Stash::import_stash()
 
 void Stash::export_stash()
 {
+	LOG("Export stash...");
 	reopen("w+b");
 	FILE * _handle = file_handle;
 	bool flag = true;
@@ -26,6 +27,8 @@ void Stash::export_stash()
 		fputs("\n", file_handle);
 		flag = false;
 	}
+	fflush(file_handle);
+	LOG("Exported");
 }
 
 void Stash::push(const char * file_path)
