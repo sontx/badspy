@@ -4,11 +4,17 @@ void Stash::import_stash()
 {
 	LOG("Import stash...");
 	stg_queue->clear();
-	char * buffer = new char[SPY_TMP_FNAME_LTH];
+	char * buffer = new char[MAX_PATH];
 	LOG("Read stash file and push to stash...");
-	while (!feof(file_handle) && fgets(buffer, SPY_TMP_FNAME_LTH, file_handle))
+	while (!feof(file_handle) && fgets(buffer, MAX_PATH, file_handle))
 	{
-		stg_queue->push(buffer);
+		int last_index = strlen(buffer);
+		if (last_index > 0)
+		{
+			if (buffer[last_index - 1] == '\n')
+				buffer[last_index - 1] = '\0';
+			stg_queue->push(buffer);
+		}
 	}
 	delete[] buffer;
 	LOG("Imported");
