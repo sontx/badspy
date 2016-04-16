@@ -7,7 +7,8 @@ void Storable::open(const char * mode)
 
 void Storable::close()
 {
-	SAFE_FREE(file_handle);
+	if (file_handle != NULL)
+		fclose(file_handle);
 }
 
 void Storable::reopen(const char * mode)
