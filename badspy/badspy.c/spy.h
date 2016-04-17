@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #include <windows.h>
 #include "../../log-cpp/log.h"
 
@@ -21,7 +25,7 @@
 #define SPY_TMP_FNAME_LTH				32
 #define SPY_TMP_DIR						"C:\\Users\\xuans\\Desktop\\spy"
 #define SPY_TMP_FNAME_STASH				"stash"
-#define SPY_TMP_KBH_MSZ					1024
+#define SPY_TMP_KBH_MSZ					20
 
 #define EXPORT __declspec(dllexport)
 #define ADD_FLAG(state, flag) {state |= flag;}
