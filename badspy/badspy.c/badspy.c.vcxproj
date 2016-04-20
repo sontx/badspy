@@ -144,31 +144,33 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\log-cpp\log.cpp" />
+    <ClCompile Include="dir.cpp" />
+    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="kbhfile.cpp" />
-    <ClCompile Include="linklist.cpp" />
-    <ClCompile Include="queue.cpp" />
+    <ClCompile Include="networking.cpp" />
     <ClCompile Include="screenshot.cpp" />
     <ClCompile Include="scrotfile.cpp" />
+    <ClCompile Include="socket.cpp" />
     <ClCompile Include="spy.cpp" />
     <ClCompile Include="storable.cpp" />
     <ClCompile Include="kbhook.cpp" />
-    <ClCompile Include="stash.cpp" />
     <ClCompile Include="storage.cpp" />
-    <ClCompile Include="task.cpp" />
+    <ClCompile Include="uploader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\log-cpp\log.h" />
+    <ClInclude Include="dir.h" />
+    <ClInclude Include="dllmain.h" />
     <ClInclude Include="kbhfile.h" />
-    <ClInclude Include="linklist.h" />
-    <ClInclude Include="queue.h" />
+    <ClInclude Include="networking.h" />
     <ClInclude Include="screenshot.h" />
     <ClInclude Include="scrotfile.h" />
+    <ClInclude Include="socket.h" />
     <ClInclude Include="storable.h" />
     <ClInclude Include="kbhook.h" />
     <ClInclude Include="spy.h" />
-    <ClInclude Include="stash.h" />
     <ClInclude Include="storage.h" />
-    <ClInclude Include="task.h" />
+    <ClInclude Include="uploader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

