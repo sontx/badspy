@@ -4,7 +4,8 @@
 
 class Storage: public Storable
 {
-	void push_to_stash() const;
+private:
+	unsigned int get_current_time_seconds();
 protected:
 	unsigned int position = 0;
 public:
