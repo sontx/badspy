@@ -14,6 +14,10 @@
 #define SPY_FILE_SEPARATOR				'/'
 #endif
 
+#define SPY_MAJOR_VERSION						0 /* add or remove features */
+#define SPY_MINOR_VERSION						0 /* change features */
+#define SPY_REVISION							0 /* fix bug, increase performance */
+
 #define SPY_AUTO_FFLUSH							/* auto flush data back to hook file when write */
 #define SPY_LOG_WINTEXT							/* enable log window text which typed on it */
 #define SPY_LOG_NUMBER							/* enable log number keys */

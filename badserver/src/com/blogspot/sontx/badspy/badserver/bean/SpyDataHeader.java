@@ -8,6 +8,7 @@ import com.blogspot.sontx.badspy.badserver.Convert;
  */
 public class SpyDataHeader {
     public static final byte HEADER_FILE = 1;
+    public static final byte HEADER_MAC = 3;
     private byte contentType;
     private int contentLength;
 

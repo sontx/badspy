@@ -12,6 +12,7 @@ class Socket
 	void connect_to_server(addrinfo * ai);
 	void close();
 public:
+	sockaddr get_sock_addr() const;
 	int available() const;
 	void write(const byte * buffer, int offset, int length);
 	int read(byte * buffer, int offset, int length);
