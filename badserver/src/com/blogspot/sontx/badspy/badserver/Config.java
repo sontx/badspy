@@ -6,6 +6,7 @@ package com.blogspot.sontx.badspy.badserver;
  */
 public final class Config {
     public static final String WORKING_DIR = "C:\\Users\\xuans\\Desktop\\spy\\server";
+    public static final String DSC_FILENAME = "dsc";
     public static final int READ_TIMEOUT = 10000;
     public static final int READ_FILE_BUFFER_SIZE = 1024;
     public static final String STORAGE_MAGIC_KBFILE = "KB";

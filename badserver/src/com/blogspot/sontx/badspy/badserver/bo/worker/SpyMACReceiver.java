@@ -3,6 +3,7 @@ package com.blogspot.sontx.badspy.badserver.bo.worker;
 import com.blogspot.sontx.badspy.badserver.Config;
 import com.blogspot.sontx.badspy.badserver.bo.SpyReader;
 import com.blogspot.sontx.badspy.badserver.bo.SpyWriter;
+import com.blogspot.sontx.jlog.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class SpyMACReceiver extends SpyReceiver {
                 if (!victimFile.isDirectory()) {
                     if (!victimFile.mkdirs())
                         victimDir = null;
+                    else
+                        Log.i(String.format("Received MAC address: %s", victimDir));
                 }
             }
         }

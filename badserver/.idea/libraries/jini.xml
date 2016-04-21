@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jini">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jini.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

