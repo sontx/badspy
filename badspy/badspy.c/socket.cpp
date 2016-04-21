@@ -116,7 +116,7 @@ int Socket::read(byte * buffer, int offset, int length)
 	{
 		LOG_W("Connection closed");
 	}
-	else
+	else if (result < 0)
 	{
 		LOG_E("Receive failed: %d", result);
 	}
