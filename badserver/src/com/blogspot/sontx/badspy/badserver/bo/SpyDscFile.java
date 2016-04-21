@@ -3,7 +3,6 @@ package com.blogspot.sontx.badspy.badserver.bo;
 import com.blogspot.sontx.jini.INIBadFormatException;
 import com.blogspot.sontx.jini.INIFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 

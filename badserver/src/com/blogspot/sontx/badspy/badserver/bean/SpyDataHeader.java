@@ -7,9 +7,10 @@ import com.blogspot.sontx.badspy.badserver.Convert;
  * Created by sontx on 20/4/2016.
  */
 public class SpyDataHeader {
-    public static final byte HEADER_FILE = 1;
-    public static final byte HEADER_MAC = 3;
-    public static final byte HEADER_HOSTNAME = 4;
+    public static final byte HEADER_FILE            = 1;
+    public static final byte HEADER_VERSION         = 2;
+    public static final byte HEADER_MAC             = 3;
+    public static final byte HEADER_HOSTNAME        = 4;
     private byte contentType;
     private int contentLength;
 

