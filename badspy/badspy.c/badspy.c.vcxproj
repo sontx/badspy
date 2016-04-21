@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\log-cpp\log.h" />
+    <ClInclude Include="cfg.h" />
     <ClInclude Include="dir.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="kbhfile.h" />
