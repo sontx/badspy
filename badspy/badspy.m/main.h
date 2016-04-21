@@ -13,4 +13,3 @@ void free_library();
 
 LOAD_SPY load_spy = NULL;
 UNLOAD_SPY unload_spy = NULL;
-TAKE_SCROT take_scrot = NULL;

