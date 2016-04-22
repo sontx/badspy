@@ -1,4 +1,0 @@
-LIBRARY badspy.c.dll
-EXPORTS
-   load_spy @1
-   unload_spy @2
