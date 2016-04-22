@@ -21,12 +21,14 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In
 
 	if (!init_dll_func())
 	{
+		free_library();
 		LOG_E("Can not bind dll functions");
 		return ERROR_CODE;
 	}
 	
 	if (load_spy())
 	{
+		free_library();
 		LOG_E("Can not load spy!");
 		return ERROR_CODE;
 	}
