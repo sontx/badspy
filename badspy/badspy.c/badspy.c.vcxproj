@@ -22,6 +22,7 @@
     <ClInclude Include="..\..\log-cpp\log.h" />
     <ClInclude Include="cfg.h" />
     <ClInclude Include="dllmain.h" />
+    <ClInclude Include="net\comm.h" />
     <ClInclude Include="net\networking.h" />
     <ClInclude Include="net\socket.h" />
     <ClInclude Include="net\uploader.h" />
@@ -38,6 +39,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\log-cpp\log.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="net\comm.cpp" />
     <ClCompile Include="net\networking.cpp" />
     <ClCompile Include="net\socket.cpp" />
     <ClCompile Include="net\uploader.cpp" />
