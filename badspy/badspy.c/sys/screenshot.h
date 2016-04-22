@@ -1,5 +1,5 @@
 #pragma once
-#include "scrotfile.h"
+#include "../stg/scrotfile.h"
 
 class Screenshot
 {

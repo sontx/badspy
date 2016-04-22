@@ -1,6 +1,6 @@
 #pragma once
-#include "spy.h"
-#include "kbhfile.h"
+#include "../spy.h"
+#include "../stg/kbhfile.h"
 
 class KBHook
 {

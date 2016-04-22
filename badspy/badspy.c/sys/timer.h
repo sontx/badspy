@@ -1,5 +1,5 @@
 #pragma once
-#include "spy.h"
+#include "../spy.h"
 
 typedef void(*timer_callback)(void);
 

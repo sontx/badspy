@@ -1,5 +1,5 @@
 #include "screenshot.h"
-#include "spy.h"
+#include "../spy.h"
 #include <ole2.h>
 #include <olectl.h>
 

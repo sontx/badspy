@@ -1,5 +1,5 @@
 #pragma once
-#include "spy.h"
+#include "../spy.h"
 #include "storable.h"
 
 class Storage: public Storable
