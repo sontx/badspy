@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "badspy.c", "badspy.c\badspy
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "badspy.m", "badspy.m\badspy.m.vcxproj", "{727F723F-DCEC-4E36-8442-B5C7DA4D0A77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "utils", "utils\utils.csproj", "{9856A327-4F41-4D7E-B343-18E691155DAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,18 @@ Global
 		{727F723F-DCEC-4E36-8442-B5C7DA4D0A77}.Release|x64.Build.0 = Release|x64
 		{727F723F-DCEC-4E36-8442-B5C7DA4D0A77}.Release|x86.ActiveCfg = Release|Win32
 		{727F723F-DCEC-4E36-8442-B5C7DA4D0A77}.Release|x86.Build.0 = Release|Win32
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Debug|x64.Build.0 = Debug|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Debug|x86.Build.0 = Debug|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Release|x64.ActiveCfg = Release|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Release|x64.Build.0 = Release|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Release|x86.ActiveCfg = Release|Any CPU
+		{9856A327-4F41-4D7E-B343-18E691155DAB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

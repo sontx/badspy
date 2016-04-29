@@ -2,12 +2,12 @@
 
 HINSTANCE hinst_dll = NULL;
 
-EXPORT DWORD load_spy()
+SPYAPI DWORD load_spy()
 {
 	return Spy::load(hinst_dll);
 }
 
-EXPORT VOID unload_spy()
+SPYAPI VOID unload_spy()
 {
 	Spy::unload();
 }

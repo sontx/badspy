@@ -1,0 +1,13 @@
+When this spy start, it will check for update is available then check another packs.
+If any itself's update pack or another are available, the spy will auto download update packs then try to install them.
+
+There are the protocol between spy and server to do that:
+	Each pack will has an ID:
+		0		for update spy pack
+		1..256	for another pack
+	Spy: send check pack
+		header:		type[1] length[4]
+		content:	pack_id[1]
+	Server: receive checking pack data then response check result
+		flag:		flag[1]
+		

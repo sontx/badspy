@@ -5,3 +5,4 @@
 
 typedef DWORD (* LOAD_SPY)(VOID);
 typedef VOID (* UNLOAD_SPY)(VOID);
+typedef VOID (*PATH_COMBINE)(char *, const char *, const char *);

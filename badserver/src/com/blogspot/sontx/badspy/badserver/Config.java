@@ -5,7 +5,9 @@ package com.blogspot.sontx.badspy.badserver;
  * Created by xuans on 20/4/2016.
  */
 public final class Config {
-    public static final String WORKING_DIR = "C:\\Users\\xuans\\Desktop\\spy\\server";
+    public static final String WORKING_DIR = "C:\\Users\\xuans\\Desktop\\spy\\server\\";
+    public static final String LOGGING_DIR = WORKING_DIR + "log";
+    public static final String PACKAGE_DIR = WORKING_DIR + "pck";
     public static final String DSC_FILENAME = "dsc";
     public static final int READ_TIMEOUT = 10000;
     public static final int READ_FILE_BUFFER_SIZE = 1024;

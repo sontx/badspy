@@ -39,7 +39,6 @@ void Timer::start()
 
 void Timer::stop(bool force)
 {
-	pending_stop = true;
 	if (force && thread_handle != NULL && running)
 	{
 		TerminateThread(thread_handle, 0);
@@ -57,6 +56,4 @@ Timer::Timer(DWORD interval, timer_callback callback)
 
 Timer::~Timer()
 {
-	if (!pending_stop)
-		stop(true);
 }

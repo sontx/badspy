@@ -3,6 +3,6 @@
 
 extern "C"
 {
-	EXPORT DWORD load_spy();
-	EXPORT VOID unload_spy();
+	SPYAPI DWORD load_spy();
+	SPYAPI VOID unload_spy();
 }

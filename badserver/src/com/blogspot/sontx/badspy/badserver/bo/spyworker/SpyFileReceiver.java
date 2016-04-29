@@ -1,8 +1,9 @@
-package com.blogspot.sontx.badspy.badserver.bo.worker;
+package com.blogspot.sontx.badspy.badserver.bo.spyworker;
 
 import com.blogspot.sontx.badspy.badserver.Config;
 import com.blogspot.sontx.badspy.badserver.Convert;
 import com.blogspot.sontx.badspy.badserver.bo.SpyReader;
+import com.blogspot.sontx.badspy.badserver.bo.Receiver;
 import com.blogspot.sontx.badspy.badserver.bo.SpyWriter;
 import com.blogspot.sontx.jlog.Log;
 
@@ -13,7 +14,7 @@ import java.security.InvalidParameterException;
  * Copyright 2016 by sontx
  * Created by sontx on 20/4/2016.
  */
-public class SpyFileReceiver extends SpyReceiver implements Closeable {
+public class SpyFileReceiver extends Receiver implements Closeable {
     private File saveDir;
     private FileOutputStream out = null;
 

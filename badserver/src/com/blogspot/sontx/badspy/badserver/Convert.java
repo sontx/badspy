@@ -17,6 +17,14 @@ public final class Convert {
                ((bytes[offset + 3] << 24) & 0xff000000);
     }
 
+    public static byte[] integerToBytes(int i) {
+        return new byte[] {
+                (byte) ((i >> 0) & 0x000000ff),
+                (byte) ((i >> 8) & 0x000000ff),
+                (byte) ((i >> 16) & 0x000000ff),
+                (byte) ((i >> 24) & 0x000000ff)};
+    }
+
     public static SpyDateTime integerToDateTime(int seconds) {
         SpyDateTime dateTime = new SpyDateTime();
         dateTime.setHour((byte) ((seconds >> 0) & 0x1f));

@@ -13,6 +13,12 @@ void Comm::send_content(const byte * buffer, int offset, int length) const
 	socket->write(buffer, offset, length);
 }
 
+void Comm::send_flag(byte flag) const
+{
+	LOG_D("Send flag: %d", flag);
+	socket->write(&flag, 0, 1);
+}
+
 void Comm::receive_header(byte * content_type, int * content_length) const
 {
 	socket->read(content_type, 0, 1);
@@ -24,7 +30,17 @@ int Comm::receive_content(byte * buffer, int offset, int length) const
 	return socket->read(buffer, offset, length);
 }
 
-int Comm::receive_flag()
+void Comm::receive_nbytes(byte * buffer, int offset, int length) const
+{
+	int received_bytes = 0;
+	do
+	{
+		int chunk = socket->read(buffer, offset + received_bytes, length - received_bytes);
+		received_bytes += chunk;
+	} while (received_bytes < length);
+}
+
+int Comm::receive_flag() const
 {
 	byte ret;
 	socket->read(&ret, 0, 1);

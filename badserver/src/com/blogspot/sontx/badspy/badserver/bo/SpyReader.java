@@ -51,4 +51,8 @@ public class SpyReader {
         byte[] buffer = new byte[5];
         return read(buffer) == buffer.length ? SpyDataHeader.parse(buffer) : null;
     }
+
+    public int readFlag() throws IOException {
+        return waitForAvailable(Config.READ_TIMEOUT) ? in.read() : -1;
+    }
 }
