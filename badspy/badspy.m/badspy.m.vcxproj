@@ -87,6 +87,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;DLLIMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
+      <StructMemberAlignment>Default</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -117,6 +118,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,6 +150,8 @@
     <ClCompile Include="bdr\backdoor.cpp" />
     <ClCompile Include="bdr\opt.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="shd\reg.cpp" />
+    <ClCompile Include="shd\selfprt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\log-cpp\log.h" />
@@ -155,6 +159,8 @@
     <ClInclude Include="bdr\opt.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="proc.h" />
+    <ClInclude Include="shd\reg.h" />
+    <ClInclude Include="shd\selfprt.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
