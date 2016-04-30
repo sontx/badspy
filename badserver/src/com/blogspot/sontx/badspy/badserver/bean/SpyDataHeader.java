@@ -16,6 +16,7 @@ public class SpyDataHeader {
     public static final byte HEADER_BDR_DT_FILENAME     = 4;
     public static final byte HEADER_BDR_DT_FILESIZE     = 5;
     public static final byte HEADER_BDR_DT_FILECHUNK    = 6;
+    public static final byte HEADER_BDR_PACKS_LIST      = 7;
 
     private byte contentType;
     private int contentLength;

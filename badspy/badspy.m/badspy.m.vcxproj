@@ -146,11 +146,13 @@
   <ItemGroup>
     <ClCompile Include="..\..\log-cpp\log.cpp" />
     <ClCompile Include="bdr\backdoor.cpp" />
+    <ClCompile Include="bdr\opt.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\log-cpp\log.h" />
     <ClInclude Include="bdr\backdoor.h" />
+    <ClInclude Include="bdr\opt.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="proc.h" />
   </ItemGroup>

@@ -5,6 +5,8 @@ import com.blogspot.sontx.badspy.badserver.bean.Version;
 
 import javax.naming.InvalidNameException;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyright 2016 by sontx
@@ -23,7 +25,8 @@ public final class BdrPackManager {
 
     public static Pack getPackById(int id) {
         try {
-            return new Pack(getPackFileNameById(id));
+            String packFileName = getPackFileNameById(id);
+            return packFileName != null ? new Pack(packFileName) : null;
         } catch (InvalidNameException e) {
             e.printStackTrace();
         }
@@ -44,5 +47,20 @@ public final class BdrPackManager {
                 return packFileName;
         }
         return null;
+    }
+
+    public static List<Pack> getAllPacks() {
+        List<Pack> packs = new ArrayList<>();
+        String[] packFileNames = workingDir.list();
+        if (packFileNames == null)
+            return packs;
+        for (String packFileName : packFileNames) {
+            try {
+                packs.add(new Pack(packFileName));
+            } catch (InvalidNameException e) {
+                e.printStackTrace();
+            }
+        }
+        return packs;
     }
 }

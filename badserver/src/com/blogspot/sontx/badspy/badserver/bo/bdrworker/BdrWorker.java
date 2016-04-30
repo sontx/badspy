@@ -27,7 +27,14 @@ public class BdrWorker extends Worker {
             case SpyDataHeader.HEADER_BDR_DWN_PACK:
                 processDownloadPackRequest(header.getContentLength());
                 break;
+            case SpyDataHeader.HEADER_BDR_PACKS_LIST:
+                processPackListRequest();
+                break;
         }
+    }
+
+    private void processPackListRequest() throws IOException {
+        new BdrPackList(reader, writer, 0).start();
     }
 
     private void processDownloadPackRequest(int contentLength) throws IOException {
