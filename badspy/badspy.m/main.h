@@ -21,8 +21,7 @@ void install_update_pack();
 // auto check, download then install another packs
 void install_packs();
 // start self-protect features
-void start_self_protect();
+bool start_self_protect();
 
 LOAD_SPY load_spy = NULL;
 UNLOAD_SPY unload_spy = NULL;
-PATH_COMBINE path_combine = NULL;

@@ -1,7 +1,6 @@
 #include "opt.h"
 #include "../proc.h"
-
-extern PATH_COMBINE path_combine;
+#include "../fso.h"
 
 void Opt::init_packs()
 {
@@ -45,13 +44,10 @@ int Opt::get_count() const
 Opt::Opt(const char * working_dir)
 {
 	char * file_path = new char[MAX_PATH];
-	path_combine(file_path, working_dir, SPY_BDR_OPT_FILENAME);
+	FSO::path_combine(file_path, working_dir, SPY_BDR_OPT_FILENAME);
 	
-	WIN32_FIND_DATAA fdata;
-	HANDLE handle = FindFirstFileA(file_path, &fdata);
-	if (handle != INVALID_HANDLE_VALUE)
+	if (FSO::file_exists(file_path))
 	{
-		FindClose(handle);
 		opt_file = fopen(file_path, "rb");
 		import_from_file();
 		fclose(opt_file);

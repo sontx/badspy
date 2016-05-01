@@ -151,6 +151,7 @@
     <ClCompile Include="..\..\log-cpp\log.cpp" />
     <ClCompile Include="bdr\backdoor.cpp" />
     <ClCompile Include="bdr\opt.cpp" />
+    <ClCompile Include="fso.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shd\reg.cpp" />
     <ClCompile Include="shd\selfprt.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="..\..\log-cpp\log.h" />
     <ClInclude Include="bdr\backdoor.h" />
     <ClInclude Include="bdr\opt.h" />
+    <ClInclude Include="fso.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="proc.h" />
     <ClInclude Include="shd\reg.h" />

