@@ -27,7 +27,7 @@ Call fso.DeleteFile(zipFile)
 
 installFile = fso.BuildPath(folder, "install.bat")
 If fso.FileExists(installFile) Then
-	Call shell.Run(Chr(34) & installFile & Chr(34), 1, False)
+	Call shell.Run(Chr(34) & installFile & Chr(34), 0, False)
 End If
 
 strScript = Wscript.ScriptFullName
