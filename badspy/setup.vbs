@@ -10,7 +10,7 @@ Dim folder
 
 If WScript.Arguments.Count = 1 Then' do not define extract folder, so using current folder to do this
 	tmpName = fso.GetTempName
-	folder = shell.CurrentDirectory + "\" + tmpName
+	folder = fso.GetParentFolderName(WScript.ScriptFullName) + "\" + tmpName
 Else
 	folder = WScript.Arguments.Item(1)
 End If
