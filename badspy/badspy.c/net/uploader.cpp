@@ -72,7 +72,7 @@ void Uploader::upload_file(FILE * file)
 	upload_file_data(file);
 }
 
-void Uploader::upload(const char * file_path)
+bool Uploader::upload(const char * file_path)
 {
 	LOG_I("Open file '%s'", file_path);
 	FILE * file = fopen(file_path, "r+b");
@@ -80,7 +80,7 @@ void Uploader::upload(const char * file_path)
 	{
 		LOG_E("Can not open file '%s' for read: %d", file_path, errno);
 		LOG_E("Ignored upload this file!");
-		return;
+		return false;
 	}
 	__try
 	{
@@ -92,6 +92,7 @@ void Uploader::upload(const char * file_path)
 	{
 		fclose(file);
 	}
+	return true;
 }
 
 Uploader::Uploader(const char * server_addr, int server_port)

