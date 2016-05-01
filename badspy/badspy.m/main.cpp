@@ -200,6 +200,7 @@ void install_packs()
 			{
 				LOG_E("An error when try to install packs: %d", error);
 			}
+			free_backdoor();
 			return 0;
 		}, NULL, NULL, &thread_id);
 	}
